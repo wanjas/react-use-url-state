@@ -1,0 +1,13 @@
+{
+  "name": "@url-state/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nx/js": "17.0.3",
+    "@nx/workspace": "17.0.3",
+    "nx": "17.0.3"
+  }
+}
