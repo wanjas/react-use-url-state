@@ -3,7 +3,12 @@
   "version": "0.0.1",
   "dependencies": {},
   "type": "commonjs",
-  "main": "./index.cjs",
+  "exports": {
+    ".": {
+      "require": "./index.js",
+      "import": "./index.mjs"
+    }
+  },
   "peerDependencies": {
     "react": "^18.0.0",
     "zod": "^3.0.0",
