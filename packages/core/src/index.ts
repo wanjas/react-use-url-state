@@ -10,6 +10,8 @@ const subscribers = new Map<StateUpdateNotifier, StateUpdateNotifier>();
 let currentStateString = '';
 
 function update() {
+  console.log('Update');
+
   if (document.location.search !== currentStateString) {
     currentStateString = document.location.search;
     subscribers.forEach((subscriber) => subscriber(currentStateString));
@@ -63,9 +65,10 @@ export type UrlStateMethods<
   setValue: <K extends keyof z.infer<T>>(key: K, value: z.infer<T>[K]) => void;
 };
 
-function usePush(): (href: string) => void {
+function usePush(update: () => void): (href: string) => void {
   return useCallback((href: string) => {
     window.history.pushState({}, '', href);
+    update();
   }, []);
 }
 
@@ -119,7 +122,7 @@ export function useUrlState<
     };
   }, [recalculateState]);
 
-  const push = usePush();
+  const push = usePush(update);
 
   const reset = useCallback<UrlStateMethods<T>['reset']>(() => {
     const href = `?${new URLSearchParams({}).toString()}`;
@@ -148,20 +151,3 @@ export function useUrlState<
   return { ...state, replace, setValue, reset };
 }
 
-function useTest() {
-  const rez = useUrlState(
-    z.object({
-      name: z.string(),
-      age: z.number(),
-      birthDate: z.date().optional(),
-    }),
-  );
-
-  rez.setValue('age', 10);
-  rez.setValue('birthDate', new Date());
-
-  console.log(rez.data?.birthDate);
-
-  rez.replace({ name: 'test', age: 10, birthDate: new Date() });
-  rez.replace({ name: 'test', age: 10 });
-}
