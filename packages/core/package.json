@@ -1,6 +1,20 @@
 {
   "name": "react-use-url-state",
   "version": "0.0.1",
+  "author": "wanjas",
+  "license": "MIT",
+  "repository": {
+    "url": "https://www.npmjs.com/package/react-use-url-state",
+    "type": "git"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "url",
+    "state",
+    "url-state"
+  ],
+  "description": "React hook for managing state in the URL",
   "dependencies": {},
   "type": "commonjs",
   "exports": {
