@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { z } from 'zod';
+import { useHandlers, usePush } from './handlers';
+import {
+  DefaultSchema,
+  UrlState,
+  UrlStateMethods,
+  UrlStateOptions,
+} from './types';
 import { urlParamsToObject } from './utils';
 
 type StateUpdateNotifier = (searchString: string) => void;
@@ -37,44 +43,10 @@ function unsubscribeFromHistory(fn: StateUpdateNotifier) {
   }
 }
 
-// const schema = z.object({
-//   name: z.string(),
-//   age: z.number(),
-// });
-
-export type UrlStateOptions = {
-  preserveUnknown: boolean;
-};
-
-export type UrlState<T extends z.ZodObject<Record<string, z.ZodTypeAny>>> = {
-  data: z.infer<T> | null;
-  isError: boolean;
-  error: z.ZodError | null;
-};
-
-// export type UrlStateValue =
-//   | string
-//   | { toString: () => string }
-//   | (string | { toString: () => string })[];
-
-export type UrlStateMethods<
-  T extends z.ZodObject<Record<string, z.ZodTypeAny>>,
-> = {
-  reset: () => void;
-  replace: (data: z.infer<T>) => void;
-  setValue: <K extends keyof z.infer<T>>(key: K, value: z.infer<T>[K]) => void;
-};
-
-function usePush(update: () => void): (href: string) => void {
-  return useCallback((href: string) => {
-    window.history.pushState({}, '', href);
-    update();
-  }, []);
-}
-
-export function useUrlState<
-  T extends z.ZodObject<Record<string, z.ZodTypeAny>>,
->(schema: T, options?: UrlStateOptions): UrlState<T> & UrlStateMethods<T> {
+export function useUrlState<T extends DefaultSchema>(
+  schema: T,
+  options?: UrlStateOptions,
+): UrlState<T> & UrlStateMethods<T> {
   options = {
     preserveUnknown: false,
     ...options,
@@ -86,7 +58,9 @@ export function useUrlState<
     data: null,
     isError: false,
     error: null,
+    isReady: false,
   });
+
   const stateRef = useRef(state);
   stateRef.current = state;
 
@@ -109,6 +83,7 @@ export function useUrlState<
         data: result.data,
         isError: !result.success,
         error: result.error,
+        isReady: true,
       });
     },
     [options?.preserveUnknown],
@@ -122,32 +97,14 @@ export function useUrlState<
     };
   }, [recalculateState]);
 
+  // set the state from initial url
+  useEffect(() => {
+    update();
+  }, []);
+
   const push = usePush(update);
 
-  const reset = useCallback<UrlStateMethods<T>['reset']>(() => {
-    const href = `?${new URLSearchParams({}).toString()}`;
-    push(href);
-  }, [push]);
+  const handlers = useHandlers<T>(push, stateRef);
 
-  const replace = useCallback<UrlStateMethods<T>['replace']>(
-    (data) => {
-      const href = `?${new URLSearchParams(data).toString()}`;
-      push(href);
-    },
-    [push],
-  );
-
-  const setValue = useCallback<UrlStateMethods<T>['setValue']>(
-    (key, value) => {
-      const href = `?${new URLSearchParams({
-        ...stateRef.current.data,
-        [key]: value,
-      }).toString()}`;
-      push(href);
-    },
-    [push],
-  );
-
-  return { ...state, replace, setValue, reset };
+  return { ...state, ...handlers };
 }
-
