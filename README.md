@@ -12,7 +12,7 @@ Connect and control your React components' state with the URL.
 pnpm add react-url-router zod
 ```
 ```sh
-npm add react-url-router zod
+npm i react-url-router zod
 ```
 
 ## Usage
