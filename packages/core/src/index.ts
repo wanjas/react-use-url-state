@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHandlers, usePush } from './handlers';
+import { GenericRouter, UrlStateRouter } from './router';
 import {
   DefaultSchema,
   UrlState,
@@ -10,47 +11,54 @@ import { urlParamsToObject } from './utils';
 
 type StateUpdateNotifier = (searchString: string) => void;
 
-let isSubscribed = false;
 const subscribers = new Map<StateUpdateNotifier, StateUpdateNotifier>();
 
 let currentStateString = '';
 
-function update() {
+function update(newSearchParams: string) {
   console.log('Update');
 
-  if (document.location.search !== currentStateString) {
-    currentStateString = document.location.search;
+  if (newSearchParams !== currentStateString) {
+    currentStateString = newSearchParams;
     subscribers.forEach((subscriber) => subscriber(currentStateString));
   }
 }
 
 function subscribeToHistory(fn: StateUpdateNotifier) {
   subscribers.set(fn, fn);
-
-  if (isSubscribed) {
-    return;
-  }
-
-  window.addEventListener('popstate', update);
 }
 
 function unsubscribeFromHistory(fn: StateUpdateNotifier) {
   subscribers.delete(fn);
-
-  if (subscribers.size === 0) {
-    window.removeEventListener('popstate', update);
-    isSubscribed = false;
-  }
 }
 
 export function useUrlState<T extends DefaultSchema>(
   schema: T,
   options?: UrlStateOptions,
-): UrlState<T> & UrlStateMethods<T> {
-  options = {
-    preserveUnknown: false,
+) {
+  const [router] = useState<UrlStateRouter>(new GenericRouter(update));
+
+  useEffect(() => {
+    return () => {
+      router.destroy();
+    };
+  }, [router]);
+
+  return useUrlStateWithRouter(schema, {
     ...options,
-  };
+    preserveUnknown: false,
+    router: router,
+  });
+}
+
+export function useUrlStateWithRouter<T extends DefaultSchema>(
+  schema: T,
+  options: UrlStateOptions & { router: UrlStateRouter },
+): UrlState<T> & UrlStateMethods<T> {
+  // options = {
+  //   preserveUnknown: false,
+  //   ...options,
+  // };
 
   const schemaRef = useRef(schema);
 
@@ -99,10 +107,10 @@ export function useUrlState<T extends DefaultSchema>(
 
   // set the state from initial url
   useEffect(() => {
-    update();
+    update(window.location.search);
   }, []);
 
-  const push = usePush(update);
+  const push = usePush(options.router);
 
   const handlers = useHandlers<T>(push, stateRef);
 

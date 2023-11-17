@@ -1,13 +1,16 @@
 import { useCallback } from 'react';
+import { UrlStateRouter } from './router';
 import { DefaultSchema, UrlState, UrlStateMethods } from './types';
 
 export type Push = (href: string) => void;
 
-export function usePush(update: () => void): Push {
-  return useCallback((href: string) => {
-    window.history.pushState({}, '', href);
-    update();
-  }, []);
+export function usePush(router: UrlStateRouter): Push {
+  return useCallback(
+    (href: string) => {
+      router.push(href);
+    },
+    [router],
+  );
 }
 
 export function useHandlers<T extends DefaultSchema>(
@@ -35,7 +38,7 @@ export function useHandlers<T extends DefaultSchema>(
       }).toString()}`;
       push(href);
     },
-    [push],
+    [push, stateRef],
   );
 
   return { reset, replace, setValue };
