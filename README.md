@@ -9,10 +9,10 @@ Connect and control your React components' state with the URL.
 ## Installation
 
 ```sh
-pnpm add react-url-router zod
+pnpm add react-use-url-state zod
 ```
 ```sh
-npm i react-url-router zod
+npm i react-use-url-state zod
 ```
 
 ## Usage

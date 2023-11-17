@@ -1,11 +1,53 @@
-# core
+# react-url-router
 
-This library was generated with [Nx](https://nx.dev).
+Connect and control your React components' state with the URL.
 
-## Building
+## TODO
 
-Run `nx build core` to build the library.
+* Support for Next.js page/app routers without polling
 
-## Running unit tests
+## Installation
 
-Run `nx test core` to execute the unit tests via [Jest](https://jestjs.io).
+```sh
+pnpm add react-use-url-state zod
+```
+```sh
+npm i react-use-url-state zod
+```
+
+## Usage
+
+> 💥 It's important to use `.coerce` on your Zod schema to ensure that the values are parsed correctly from the URL.
+
+```tsx
+function MyComponent() {
+  const { data, replace, setValue, isError } = useUrlState(
+    z.object({
+      name: z.string(),
+      age: z.coerce.number(),
+      birthDate: z.coerce.date().optional(),
+    }),
+  );
+  
+  return <div>
+    <Button
+      onClick={() => {
+        replace({ name: 'test', age: 10, birthDate: new Date() });
+      }}
+    >
+      {`replace({ name: 'test', age: 10, birthDate: new Date() })`}
+    </Button>
+
+    <Button
+      onClick={() => {
+        setValue('age', age);
+        setAge(age + 1);
+      }}
+    >
+      Increment age
+    </Button>
+
+    <pre>{JSON.stringify(state, null, 2)}</pre>
+  </div>
+}
+```

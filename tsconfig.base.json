@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "react-url-state": ["packages/core/src/index.ts"]
+      "react-use-url-state": ["packages/core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useUrlState } from 'react-url-state';
+import { useUrlState } from 'react-use-url-state';
 import { z } from 'zod';
 import { Button } from './Button';
 import { StateView } from './StateView';
