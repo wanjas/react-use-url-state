@@ -8,15 +8,17 @@ export abstract class UrlStateRouter {
 
 let genericRouterCurrentStateString = '';
 export class GenericRouter extends UrlStateRouter {
-  private interval: number;
+  private interval = 0;
 
   constructor(private callback: Callback) {
     super();
 
     // 'popstate' event in browser is not reliable, so we need to poll
-    this.interval = setInterval(() => {
-      this.onSearchParamsChange();
-    }, 100);
+    if (typeof window !== 'undefined') {
+      this.interval = setInterval(() => {
+        this.onSearchParamsChange();
+      }, 100);
+    }
   }
 
   override push(href: string): void {
@@ -25,8 +27,8 @@ export class GenericRouter extends UrlStateRouter {
   }
 
   override onSearchParamsChange(): void {
-    if (document.location.search !== genericRouterCurrentStateString) {
-      genericRouterCurrentStateString = document.location.search;
+    if (window.location.search !== genericRouterCurrentStateString) {
+      genericRouterCurrentStateString = window.location.search;
       this.callback(window.location.search);
     }
   }

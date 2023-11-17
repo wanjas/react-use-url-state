@@ -78,7 +78,7 @@ export function StateChanger() {
           href={`?${new URLSearchParams({
             name: 'link/test',
             age: '77',
-            birthDate: new Date().toISOString(),
+            birthDate: new Date('2023-01-01').toISOString(),
           }).toString()}`}
         >
           Link
