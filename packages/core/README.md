@@ -1,10 +1,10 @@
-# react-url-router
+# react-use-url-state
 
 Connect and control your React components' state with the URL.
 
 ## 🚧 TODO
 
-> It's WIP. Not ready for use yet. Examples, docs, and tests are coming this year. 
+> It's WIP. Not ready for use yet. Examples, docs, and tests are coming this year.
 > Before stable release (v1), the API may change significantly.
 
 * Next.js page/app routers without polling support
@@ -33,7 +33,7 @@ function MyComponent() {
       birthDate: z.coerce.date().optional(),
     }),
   );
-  
+
   return <div>
     <Button
       onClick={() => {
