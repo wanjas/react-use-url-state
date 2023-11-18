@@ -1,0 +1,14 @@
+# Quick start
+
+```ts  {5-9} copy
+import { useUrlState } from 'react-use-url-state';
+import { z } from 'zod';
+
+function MyComponent() {
+  const { data, setState } = useUrlState({
+      name: z.string(),
+      age: z.coerce.number(),
+      birthDate: z.coerce.date().optional(),
+    });
+}
+```
