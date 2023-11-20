@@ -6,18 +6,26 @@ export abstract class UrlStateRouter {
   destroy(): void {}
 }
 
+export type GenericRouterOptions = {
+  poolingIntervalMs?: number;
+};
+
 let genericRouterCurrentStateString = '';
 export class GenericRouter extends UrlStateRouter {
   private interval = 0;
 
-  constructor(private callback: Callback) {
+  constructor(
+    private callback: Callback,
+    private options: GenericRouterOptions,
+  ) {
     super();
+    this.options = { poolingIntervalMs: 100, ...options };
 
     // 'popstate' event in browser is not reliable, so we need to poll
     if (typeof window !== 'undefined') {
       this.interval = setInterval(() => {
         this.onSearchParamsChange();
-      }, 100);
+      }, this.options.poolingIntervalMs);
     }
   }
 

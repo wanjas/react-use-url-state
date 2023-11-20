@@ -17,14 +17,31 @@ export function useHandlers<T extends DefaultSchema>(
   push: Push,
   stateRef: React.MutableRefObject<UrlState<T>>,
 ) {
-  const reset = useCallback<UrlStateMethods<T>['reset']>(() => {
-    const href = `?${new URLSearchParams({}).toString()}`;
-    push(href);
-  }, [push]);
+  // const reset = useCallback<UrlStateMethods<T>['reset']>(() => {
+  //   const href = `?${new URLSearchParams({}).toString()}`;
+  //   push(href);
+  // }, [push]);
 
-  const replace = useCallback<UrlStateMethods<T>['replace']>(
-    (data) => {
-      const href = `?${new URLSearchParams(data).toString()}`;
+  const setState = useCallback<UrlStateMethods<T>['setState']>(
+    (state) => {
+      if (typeof state === 'function') {
+        state = state(stateRef.current.data);
+      }
+      const href = `?${new URLSearchParams(state).toString()}`;
+      push(href);
+    },
+    [push],
+  );
+
+  const updateState = useCallback<UrlStateMethods<T>['updateState']>(
+    (state) => {
+      if (typeof state === 'function') {
+        state = state(stateRef.current.data);
+      }
+      const href = `?${new URLSearchParams({
+        ...stateRef.current.data,
+        ...state,
+      }).toString()}`;
       push(href);
     },
     [push],
@@ -41,5 +58,5 @@ export function useHandlers<T extends DefaultSchema>(
     [push, stateRef],
   );
 
-  return { reset, replace, setValue };
+  return { setState, setValue, updateState };
 }

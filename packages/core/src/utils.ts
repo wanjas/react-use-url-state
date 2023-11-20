@@ -17,3 +17,7 @@ export function urlParamsToObject(params: URLSearchParams) {
 
   return object;
 }
+
+export function searchIsEmpty(search: string) {
+  return !search || search.indexOf('=') === -1;
+}

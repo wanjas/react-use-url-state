@@ -9,7 +9,7 @@ import { Button } from './Button';
 import { StateView } from './StateView';
 
 export function StateChanger() {
-  const { data, replace, setValue, reset } = useUrlState(
+  const { data, setState, setValue, updateState } = useUrlState(
     z.object({
       name: z.string(),
       age: z.coerce.number(),
@@ -48,16 +48,16 @@ export function StateChanger() {
         </Button>
         <Button
           onClick={() => {
-            replace({ name: 'test', age: 10, birthDate: new Date() });
+            setState({ name: 'test', age: 10, birthDate: new Date() });
           }}
         >
-          {`replace({ name: 'test', age: 10, birthDate: new Date() })`}
+          {`setState({ name: 'test', age: 10, birthDate: new Date() })`}
         </Button>
         <Button
           onClick={() => {
-            replace({ name: 'test', age: 10 });
+            setState({ name: 'test', age: 10 });
           }}
-        >{`replace({ name: 'test', age: 10 })`}</Button>
+        >{`setState({ name: 'test', age: 10 })`}</Button>
       </div>
 
       <div>

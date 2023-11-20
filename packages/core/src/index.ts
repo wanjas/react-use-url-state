@@ -6,8 +6,9 @@ import {
   UrlState,
   UrlStateMethods,
   UrlStateOptions,
+  UrlStateValue,
 } from './types';
-import { urlParamsToObject } from './utils';
+import { searchIsEmpty, urlParamsToObject } from './utils';
 
 type StateUpdateNotifier = (searchString: string) => void;
 
@@ -34,9 +35,12 @@ function unsubscribeFromHistory(fn: StateUpdateNotifier) {
 
 export function useUrlState<T extends DefaultSchema>(
   schema: T,
+  initialValue?: UrlStateValue<T> | null,
   options?: UrlStateOptions,
 ) {
-  const [router] = useState<UrlStateRouter>(new GenericRouter(update));
+  const [router] = useState<UrlStateRouter>(
+    () => new GenericRouter(update, {}),
+  );
 
   useEffect(() => {
     return () => {
@@ -44,28 +48,25 @@ export function useUrlState<T extends DefaultSchema>(
     };
   }, [router]);
 
-  return useUrlStateWithRouter(schema, {
-    ...options,
+  return useUrlStateWithRouter(schema, initialValue || null, {
     preserveUnknown: false,
+    applyInitialValue: false,
+    ...options,
     router: router,
   });
 }
 
 export function useUrlStateWithRouter<T extends DefaultSchema>(
   schema: T,
+  initialValue: UrlStateValue<T> | null,
   options: UrlStateOptions & { router: UrlStateRouter },
 ): UrlState<T> & UrlStateMethods<T> {
-  // options = {
-  //   preserveUnknown: false,
-  //   ...options,
-  // };
-
   const schemaRef = useRef(schema);
 
   const [state, setState] = useState<UrlState<T>>({
-    data: null,
-    isError: false,
+    data: initialValue,
     error: null,
+    isError: false,
     isReady: false,
   });
 
@@ -107,12 +108,20 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
 
   // set the state from initial url
   useEffect(() => {
-    update(window.location.search);
+    if (!initialValue || searchIsEmpty(window.location.search)) {
+      update(window.location.search);
+    }
   }, []);
 
   const push = usePush(options.router);
 
   const handlers = useHandlers<T>(push, stateRef);
+
+  useEffect(() => {
+    if (state.isReady && state.isError && options.applyInitialValue) {
+      handlers.setState({ ...state.data, ...initialValue });
+    }
+  }, [state.isReady]);
 
   return { ...state, ...handlers };
 }
