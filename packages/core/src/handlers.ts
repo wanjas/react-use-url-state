@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { UrlStateRouter } from './router';
 import { DefaultSchema, UrlState, UrlStateMethods } from './types';
+import { serializeObjectToUrlParams } from './utils';
 
 export type Push = (href: string) => void;
 
@@ -17,20 +18,15 @@ export function useHandlers<T extends DefaultSchema>(
   push: Push,
   stateRef: React.MutableRefObject<UrlState<T>>,
 ) {
-  // const reset = useCallback<UrlStateMethods<T>['reset']>(() => {
-  //   const href = `?${new URLSearchParams({}).toString()}`;
-  //   push(href);
-  // }, [push]);
-
   const setState = useCallback<UrlStateMethods<T>['setState']>(
     (state) => {
       if (typeof state === 'function') {
         state = state(stateRef.current.data);
       }
-      const href = `?${new URLSearchParams(state).toString()}`;
+      const href = serializeObjectToUrlParams(state);
       push(href);
     },
-    [push],
+    [push, stateRef],
   );
 
   const updateState = useCallback<UrlStateMethods<T>['updateState']>(
@@ -38,21 +34,21 @@ export function useHandlers<T extends DefaultSchema>(
       if (typeof state === 'function') {
         state = state(stateRef.current.data);
       }
-      const href = `?${new URLSearchParams({
+      const href = serializeObjectToUrlParams({
         ...stateRef.current.data,
         ...state,
-      }).toString()}`;
+      });
       push(href);
     },
-    [push],
+    [push, stateRef],
   );
 
   const setValue = useCallback<UrlStateMethods<T>['setValue']>(
     (key, value) => {
-      const href = `?${new URLSearchParams({
+      const href = serializeObjectToUrlParams({
         ...stateRef.current.data,
         [key]: value,
-      }).toString()}`;
+      });
       push(href);
     },
     [push, stateRef],

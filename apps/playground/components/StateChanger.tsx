@@ -9,12 +9,14 @@ import { Button } from './Button';
 import { StateView } from './StateView';
 
 export function StateChanger() {
-  const { data, setState, setValue, updateState } = useUrlState(
-    z.object({
-      name: z.string(),
-      age: z.coerce.number(),
-      birthDate: z.coerce.date().optional(),
-    }),
+  const { data, setState, setValue, updateState, isError, error } = useUrlState(
+    z
+      .object({
+        name: z.string(),
+        age: z.coerce.number(),
+        birthDate: z.coerce.date().optional(),
+      })
+      .passthrough(),
   );
 
   const [age, setAge] = useState(11);
@@ -87,6 +89,7 @@ export function StateChanger() {
       <hr className="my-4" />
 
       <StateView state={data || {}} />
+      {isError && <pre className="text-red-500">Error</pre>}
     </div>
   );
 }

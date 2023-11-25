@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 export type UrlStateOptions = {
-  preserveUnknown: boolean;
   applyInitialValue: boolean;
 };
 

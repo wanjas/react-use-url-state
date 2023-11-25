@@ -8,7 +8,11 @@ import {
   UrlStateOptions,
   UrlStateValue,
 } from './types';
-import { searchIsEmpty, urlParamsToObject } from './utils';
+import {
+  searchIsEmpty,
+  urlParamsToObject,
+  useShallowEqualValue,
+} from './utils';
 
 type StateUpdateNotifier = (searchString: string) => void;
 
@@ -43,13 +47,13 @@ export function useUrlState<T extends DefaultSchema>(
   );
 
   useEffect(() => {
+    router.init();
     return () => {
       router.destroy();
     };
   }, [router]);
 
   return useUrlStateWithRouter(schema, initialValue || null, {
-    preserveUnknown: false,
     applyInitialValue: false,
     ...options,
     router: router,
@@ -73,30 +77,25 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
   const stateRef = useRef(state);
   stateRef.current = state;
 
-  const recalculateState = useCallback(
-    (searchString: string) => {
-      const params = new URLSearchParams(searchString);
-      const object = urlParamsToObject(params);
+  const cachedInitialValue = useShallowEqualValue(initialValue);
 
-      const validationResult = schemaRef.current.safeParse(object);
+  const recalculateState = useCallback((searchString: string) => {
+    const params = new URLSearchParams(searchString);
+    const object = urlParamsToObject(params);
 
-      const result = validationResult.success
-        ? { success: true, data: validationResult.data, error: null }
-        : { success: false, data: null, error: validationResult.error };
+    const validationResult = schemaRef.current.safeParse(object);
 
-      if (options?.preserveUnknown) {
-        result.data = { ...object, ...result.data };
-      }
+    const result = validationResult.success
+      ? { success: true, data: validationResult.data, error: null }
+      : { success: false, data: object, error: validationResult.error };
 
-      setState({
-        data: result.data,
-        isError: !result.success,
-        error: result.error,
-        isReady: true,
-      });
-    },
-    [options?.preserveUnknown],
-  );
+    setState({
+      data: result.data,
+      isError: !result.success,
+      error: result.error,
+      isReady: true,
+    });
+  }, []);
 
   useEffect(() => {
     subscribeToHistory(recalculateState);
@@ -108,20 +107,21 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
 
   // set the state from initial url
   useEffect(() => {
-    if (!initialValue || searchIsEmpty(window.location.search)) {
+    if (!cachedInitialValue || searchIsEmpty(window.location.search)) {
       update(window.location.search);
     }
-  }, []);
+  }, [cachedInitialValue]);
 
   const push = usePush(options.router);
 
   const handlers = useHandlers<T>(push, stateRef);
 
+  // only apply on initial render or initial value change
   useEffect(() => {
     if (state.isReady && state.isError && options.applyInitialValue) {
-      handlers.setState({ ...state.data, ...initialValue });
+      handlers.setState({ ...state.data, ...cachedInitialValue });
     }
-  }, [state.isReady]);
+  }, [state.isReady, cachedInitialValue]);
 
   return { ...state, ...handlers };
 }

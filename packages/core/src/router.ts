@@ -3,6 +3,7 @@ type Callback = (newSearchParams: string) => void;
 export abstract class UrlStateRouter {
   push(href: string): void {}
   onSearchParamsChange(): void {}
+  init(): void {}
   destroy(): void {}
 }
 
@@ -20,7 +21,9 @@ export class GenericRouter extends UrlStateRouter {
   ) {
     super();
     this.options = { poolingIntervalMs: 100, ...options };
+  }
 
+  override init(): void {
     // 'popstate' event in browser is not reliable, so we need to poll
     if (typeof window !== 'undefined') {
       this.interval = setInterval(() => {
