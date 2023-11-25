@@ -26,7 +26,7 @@ npm i react-use-url-state zod
 
 ```tsx
 function MyComponent() {
-  const { data, replace, setValue, isError } = useUrlState(
+  const { data, setState, setValue, isError, error } = useUrlState(
     z.object({
       name: z.string(),
       age: z.coerce.number(),
@@ -37,7 +37,7 @@ function MyComponent() {
   return <div>
     <Button
       onClick={() => {
-        replace({ name: 'test', age: 10, birthDate: new Date() });
+        setState({ name: 'test', age: 10, birthDate: new Date() });
       }}
     >
       {`replace({ name: 'test', age: 10, birthDate: new Date() })`}
@@ -45,8 +45,7 @@ function MyComponent() {
 
     <Button
       onClick={() => {
-        setValue('age', age);
-        setAge(age + 1);
+        setValue('age', data.age + 1);
       }}
     >
       Increment age

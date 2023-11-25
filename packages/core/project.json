@@ -26,7 +26,8 @@
             "glob": "*.d.ts",
             "input": "packages/core/.declarations/src",
             "output": "/"
-          }
+          },
+          "{workspaceRoot}/README.md"
         ],
         "generatePackageJson": true,
         "format": ["cjs", "esm"],
