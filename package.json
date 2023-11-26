@@ -13,7 +13,8 @@
     "react-dom": "^18.2.0",
     "tailwindcss": "^3.3.5",
     "tslib": "^2.3.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "clsx": "2.0.0"
   },
   "devDependencies": {
     "@nx/devkit": "17.1.2",

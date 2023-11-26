@@ -1,20 +1,17 @@
 {
-  "index": "Introduction",
-  "another": "Another Page",
-  "about": {
-    "title": "About",
-    "type": "page"
-  },
   "contact": {
     "title": "Contact ↗",
     "type": "page",
     "href": "https://twitter.com/Wanjas_kun",
     "newWindow": true
   },
-  "---": {
-    "type": "separator",
-    "title": ""
-  },
+  "index": "Introduction",
+  "installation": "Installation",
+  "quick-start": "Quick start",
   "examples": "Examples",
+  "api-reference": {
+    "title": "API reference",
+    "display": "hidden"
+  },
   "contributing": "Contributing"
 }

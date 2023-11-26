@@ -1,14 +1,40 @@
 # Quick start
 
-```ts  {5-9} copy
+```tsx {5-12} copy
 import { useUrlState } from 'react-use-url-state';
 import { z } from 'zod';
 
 function MyComponent() {
-  const { data, setState } = useUrlState({
+  const { data, setState, isError } = useUrlState(
+    {
       name: z.string(),
       age: z.coerce.number(),
       birthDate: z.coerce.date().optional(),
-    });
+    },
+    { initialState: { name: 'default', age: 0 } },
+  );
+
+  return (
+    <div>
+      <button
+        onClick={() =>
+          setState({
+            name: 'my name',
+            age: 99,
+            birthDate: new Date('1999-01-01'),
+          })
+        }
+      >
+        Set state
+      </button>
+
+      {!isError && (
+        <div>
+          {data.name}: {data.age} ({data.birthDate})
+        </div>
+      )}
+      {isError && <div>Invalid url params</div>}
+    </div>
+  );
 }
 ```

@@ -1,24 +1,15 @@
-import { Callout } from 'nextra/components';
-import { InitialValue } from '../../components/examples/InitialValue';
+import { Arrays } from '../../components/examples/Arrays';
 
-# Initial value
+# Arrays example
 
-<Callout>
-  Initial value is applied on <b>initial load</b>.
-</Callout>
-
-```tsx {8-10} copy
+```tsx {6} copy
 const { data, setState, setValue } = useUrlState(
   z.object({
     search: z.string(),
     limit: z.coerce.number().max(100),
     from: z.coerce.date().optional(),
+    arr: z.array(z.string()),
   }),
-  {
-    search: 'init',
-    limit: 1,
-    from: new Date('1000-01-01'),
-  },
 );
 
 return (
@@ -29,13 +20,22 @@ return (
           search: 'query',
           limit: 10,
           from: new Date(),
+          arr: ['one', 'two'],
         })
       }
     >
-      Set the state
+      1. Set the state
+    </Button>
+
+    <Button
+      onClick={() => setValue('limit', 999)}
+      color="error"
+      disabled={!data}
+    >
+      2. Set errored state
     </Button>
   </ButtonsGroup>
 );
 ```
 
-<InitialValue applyInitialValue={false} />
+<Arrays />

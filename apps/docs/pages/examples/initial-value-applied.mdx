@@ -1,13 +1,13 @@
 import { Callout } from 'nextra/components';
 import { InitialValue } from '../../components/examples/InitialValue';
 
-# Initial value
+# Initial value (applied to URL)
 
-<Callout>
-  Initial value is applied on <b>initial load</b>.
-</Callout>
+<Callout>Initial value is applied on initial load.</Callout>
 
-```tsx {8-10} copy
+Use `applyInitialValue` options to make initial value being applied to URL if it has no search params on load.
+
+```tsx {8-9,13} copy
 const { data, setState, setValue } = useUrlState(
   z.object({
     search: z.string(),
@@ -18,6 +18,9 @@ const { data, setState, setValue } = useUrlState(
     search: 'init',
     limit: 1,
     from: new Date('1000-01-01'),
+  },
+  {
+    applyInitialValue: true,
   },
 );
 
@@ -38,4 +41,4 @@ return (
 );
 ```
 
-<InitialValue applyInitialValue={false} />
+<InitialValue applyInitialValue={true} />

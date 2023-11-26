@@ -1,3 +1,40 @@
-# About
+import { Callout } from 'nextra/components';
+import { Advanced } from '../../components/examples/Advanced';
 
-This is the about page! This page is shown on the navbar.
+# Advanced example
+
+```tsx {4} copy
+const { data, setState, setValue } = useUrlState(
+  z.object({
+    search: z.string(),
+    limit: z.coerce.number().max(100),
+    from: z.coerce.date().optional(),
+  }),
+);
+
+return (
+  <ButtonsGroup>
+    <Button
+      onClick={() =>
+        setState({
+          search: 'query',
+          limit: 10,
+          from: new Date(),
+        })
+      }
+    >
+      1. Set the state
+    </Button>
+
+    <Button
+      onClick={() => setValue('limit', 999)}
+      color="error"
+      disabled={!data}
+    >
+      2. Set errored state
+    </Button>
+  </ButtonsGroup>
+);
+```
+
+<Advanced />

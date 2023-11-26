@@ -1,5 +1,6 @@
 {
   "basic": "Basic",
   "advanced": "Advanced",
-  "nested": "Nested"
+  "initial-value": "Initial value",
+  "initial-value-applied": "Initial value (applied)"
 }

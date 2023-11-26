@@ -6,9 +6,9 @@ const config: DocsThemeConfig = {
   project: {
     link: 'https://github.com/wanjas/react-use-url-state',
   },
-  chat: {
-    link: 'https://discord.com',
-  },
+  // chat: {
+  //   link: 'https://discord.com',
+  // },
   docsRepositoryBase:
     'https://github.com/wanjas/react-use-url-state/tree/main/apps/docs',
   footer: {

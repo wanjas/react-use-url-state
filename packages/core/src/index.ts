@@ -67,8 +67,10 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
 ): UrlState<T> & UrlStateMethods<T> {
   const schemaRef = useRef(schema);
 
+  const cachedInitialValue = useShallowEqualValue(initialValue);
+
   const [state, setState] = useState<UrlState<T>>({
-    data: initialValue,
+    data: cachedInitialValue,
     error: null,
     isError: false,
     isReady: false,
@@ -76,8 +78,6 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
 
   const stateRef = useRef(state);
   stateRef.current = state;
-
-  const cachedInitialValue = useShallowEqualValue(initialValue);
 
   const recalculateState = useCallback((searchString: string) => {
     const params = new URLSearchParams(searchString);
@@ -105,23 +105,28 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
     };
   }, [recalculateState]);
 
-  // set the state from initial url
-  useEffect(() => {
-    if (!cachedInitialValue || searchIsEmpty(window.location.search)) {
-      update(window.location.search);
-    }
-  }, [cachedInitialValue]);
-
   const push = usePush(options.router);
 
   const handlers = useHandlers<T>(push, stateRef);
 
-  // only apply on initial render or initial value change
+  // set the state from initial url
   useEffect(() => {
-    if (state.isReady && state.isError && options.applyInitialValue) {
+    if (!cachedInitialValue) {
+      update(window.location.search);
+    } else if (
+      state.isReady &&
+      options.applyInitialValue &&
+      cachedInitialValue &&
+      searchIsEmpty(window.location.search)
+    ) {
       handlers.setState({ ...state.data, ...cachedInitialValue });
+    } else {
+      setState((st) => ({
+        ...st,
+        isReady: true,
+      }));
     }
-  }, [state.isReady, cachedInitialValue]);
+  }, [state.isReady, cachedInitialValue, options.applyInitialValue]);
 
   return { ...state, ...handlers };
 }
