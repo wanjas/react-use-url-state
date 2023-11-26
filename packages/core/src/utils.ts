@@ -1,20 +1,25 @@
 import { useRef } from 'react';
 import { DefaultSchema } from './types';
 
+function isNil(value: unknown): value is null | undefined {
+  return value === null || value === undefined;
+}
+
 export function urlParamsToObject(params: URLSearchParams) {
   const object: Record<string, string | string[]> = {};
 
   for (const [key, value] of params.entries()) {
-    if (!object[key]) {
+    if (isNil(object[key])) {
       object[key] = value;
       continue;
     }
 
     const currentValue = object[key];
-    if (typeof currentValue === 'string') {
-      object[key] = [currentValue, value];
-    } else {
+
+    if (Array.isArray(currentValue)) {
       currentValue.push(value);
+    } else {
+      object[key] = [currentValue, value];
     }
   }
 
@@ -71,24 +76,52 @@ export function useShallowEqualValue<T>(value: T) {
   return ref.current;
 }
 
+function serializeValue(
+  value: unknown,
+): string | undefined | (string | undefined)[] {
+  if (isNil(value)) {
+    return undefined;
+  }
+
+  if (typeof value === 'object') {
+    if (value instanceof Date) {
+      return value.toISOString();
+    } else if (Array.isArray(value)) {
+      return value.map((v) => {
+        if (typeof v === 'object') {
+          return JSON.stringify(v);
+        }
+        return serializeValue(v) as string;
+      });
+    } else {
+      return value?.toString?.();
+    }
+  }
+
+  return value?.toString();
+}
+
 export function serializeObjectToUrlParams(object: Record<string, any>) {
-  const updatedObject = { ...object };
+  const params = new URLSearchParams();
 
-  Object.keys(updatedObject).forEach((key) => {
-    const value = updatedObject[key];
+  Object.keys(object).forEach((key) => {
+    const value = serializeValue(object[key]);
     if (value === undefined || value === null) {
-      delete updatedObject[key];
+      return;
     }
 
-    if (typeof value === 'object') {
-      if (value instanceof Date) {
-        updatedObject[key] = value.toISOString();
-      } else {
-        updatedObject[key] = value?.toString?.();
-      }
+    if (Array.isArray(value)) {
+      value.forEach((v) => {
+        if (isNil(v)) {
+          return;
+        }
+        params.append(key, v);
+      });
+      return;
     }
+
+    params.append(key, value);
   });
 
-  const params = new URLSearchParams(updatedObject);
   return `?${params.toString()}`;
 }

@@ -1,6 +1,6 @@
 import { Callout } from 'nextra/components';
 import { useUrlState } from 'react-use-url-state';
-import { z } from 'zod';
+import { array, z } from 'zod';
 
 import { Button } from '../Button';
 import { ButtonsGroup } from '../ButtonsGroup';
@@ -12,7 +12,14 @@ export function Arrays() {
       search: z.string(),
       limit: z.coerce.number().max(100),
       from: z.coerce.date().optional(),
-      stringArr: z.array(z.string()),
+      stringArr: z.preprocess(
+        (v) => (Array.isArray(v) ? v : [v]), // convert to array if only one item is present
+        z.array(z.string()), // definition of the array items
+      ),
+      numberArr: z.preprocess(
+        (v) => (Array.isArray(v) ? v : [v]), // convert to array if only one item is present
+        z.array(z.coerce.number()), // definition of the array items
+      ),
     }),
   );
 
@@ -28,6 +35,7 @@ export function Arrays() {
               limit: 10,
               from: new Date(),
               stringArr: ['one', 'two'],
+              numberArr: [123, 321],
             })
           }
         >

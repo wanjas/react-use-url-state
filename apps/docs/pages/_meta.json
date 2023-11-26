@@ -3,7 +3,8 @@
     "title": "Contact ↗",
     "type": "page",
     "href": "https://twitter.com/Wanjas_kun",
-    "newWindow": true
+    "newWindow": true,
+    "display": "hidden"
   },
   "index": "Introduction",
   "installation": "Installation",

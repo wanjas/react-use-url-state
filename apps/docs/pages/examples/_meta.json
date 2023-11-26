@@ -2,5 +2,10 @@
   "basic": "Basic",
   "advanced": "Advanced",
   "initial-value": "Initial value",
-  "initial-value-applied": "Initial value (applied)"
+  "initial-value-applied": "Initial value (applied)",
+  "arrays": "Arrays",
+  "passthrough": {
+    "title": "Passthrough",
+    "display": "hidden"
+  }
 }

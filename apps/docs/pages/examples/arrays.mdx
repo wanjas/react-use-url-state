@@ -1,14 +1,29 @@
+import { Callout } from 'nextra/components';
 import { Arrays } from '../../components/examples/Arrays';
 
 # Arrays example
 
-```tsx {6} copy
+<Callout>
+  In order to handle the situation when there is only one element in the array
+  you have to use `preprocess` explicit conversion. Alternitively, you can use
+  `z.coerce.number().or(z.array(z.coerce.number()))` but then the returned type
+  is `number | number[]`
+</Callout>
+
+```tsx {6-13} copy
 const { data, setState, setValue } = useUrlState(
   z.object({
     search: z.string(),
     limit: z.coerce.number().max(100),
     from: z.coerce.date().optional(),
-    arr: z.array(z.string()),
+    stringArr: z.preprocess(
+      (v) => (Array.isArray(v) ? v : [v]), // convert to array if only one item is present
+      z.array(z.string()), // definition of the array items
+    ),
+    numberArr: z.preprocess(
+      (v) => (Array.isArray(v) ? v : [v]),
+      z.array(z.coerce.number()), // definition of the array items
+    ),
   }),
 );
 
@@ -20,7 +35,8 @@ return (
           search: 'query',
           limit: 10,
           from: new Date(),
-          arr: ['one', 'two'],
+          stringArr: ['one', 'two'],
+          numberArr: [123, 321],
         })
       }
     >
