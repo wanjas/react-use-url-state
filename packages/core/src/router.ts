@@ -13,7 +13,7 @@ export type GenericRouterOptions = {
 
 let genericRouterCurrentStateString = '';
 export class GenericRouter extends UrlStateRouter {
-  private interval = 0;
+  private interval: number = 0;
 
   constructor(
     private callback: Callback,
@@ -28,7 +28,7 @@ export class GenericRouter extends UrlStateRouter {
     if (typeof window !== 'undefined') {
       this.interval = setInterval(() => {
         this.onSearchParamsChange();
-      }, this.options.poolingIntervalMs);
+      }, this.options.poolingIntervalMs) as unknown as number; // fix for NodeJS
     }
   }
 
