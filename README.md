@@ -1,15 +1,10 @@
 # react-use-url-state
 
-Connect and control your React components' state with the URL.
+Use URL to store a state in React.
 
-## 🚧 TODO
+* Easily handle numbers, dates, booleans, and arrays.
+* Have a type-safety with [Zod](https://zod.dev/)
 
-> It's WIP. Not ready for use yet. Examples, docs, and tests are coming this year.
-> Before stable release (v1), the API may change significantly.
-
-* Next.js page/app routers without polling support
-* Placeholder and initial value support
-* `Date` in different locales testing
 
 ## Installation
 
@@ -20,9 +15,14 @@ pnpm add react-use-url-state zod
 npm i react-use-url-state zod
 ```
 
+# Documentation
+
+📝[Documentation and examples](https://react-use-url-state.vercel.app/)
+
+
 ## Usage
 
-> 💥 It's important to use `.coerce` on your Zod schema to ensure that the values are parsed correctly from the URL.
+> It's important to use `.coerce` on your Zod schema to ensure that the values are parsed correctly from the URL. 
 
 ```tsx
 function MyComponent() {
@@ -40,7 +40,7 @@ function MyComponent() {
         setState({ name: 'test', age: 10, birthDate: new Date() });
       }}
     >
-      {`replace({ name: 'test', age: 10, birthDate: new Date() })`}
+      Set state
     </Button>
 
     <Button
@@ -55,3 +55,8 @@ function MyComponent() {
   </div>
 }
 ```
+
+## 🚧 TODO
+
+* [ ] Add automatic tests
+* [ ] Add routers without polling for Next App/Page
