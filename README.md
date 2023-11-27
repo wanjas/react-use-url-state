@@ -51,7 +51,7 @@ function MyComponent() {
       Increment age
     </Button>
 
-    <pre>{JSON.stringify(state, null, 2)}</pre>
+    <pre>{JSON.stringify(data, null, 2)}</pre>
   </div>
 }
 ```

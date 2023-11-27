@@ -4,7 +4,7 @@
   "author": "wanjas",
   "license": "MIT",
   "repository": {
-    "url": "https://www.npmjs.com/package/react-use-url-state",
+    "url": "https://github.com/wanjas/react-use-url-state",
     "type": "git"
   },
   "keywords": [
