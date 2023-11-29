@@ -5,12 +5,14 @@ Use URL to store a state in React.
 * Easily handle numbers, dates, booleans, and arrays.
 * Have a type-safety with [Zod](https://zod.dev/)
 
+> `https://example.com/?text=query&number=10&date=2023-11-29T13%3A52%3A50.230Z`
+> 
+> <=>
+> 
+> `{ text: 'query', number: 10, date: new Date('2023-11-29T13:52:50.230Z') }`
 
 ## Installation
 
-```sh
-pnpm add react-use-url-state zod
-```
 ```sh
 npm i react-use-url-state zod
 ```
