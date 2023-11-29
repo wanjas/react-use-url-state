@@ -1,4 +1,5 @@
 import { Callout } from 'nextra/components';
+import { DelayedRender } from '../../components/DelayedRender';
 import { InitialValue } from '../../components/examples/InitialValue';
 
 # Initial value (applied to URL)
@@ -41,4 +42,7 @@ return (
 );
 ```
 
-<InitialValue applyInitialValue={true} />
+<DelayedRender>
+  {/* Fix for a weird on page load "rollback of URL params to empty. Not happening if another page is open first */}
+  <InitialValue applyInitialValue={true} />
+</DelayedRender>

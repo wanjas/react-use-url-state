@@ -71,6 +71,7 @@ function shallowEqual<T>(a: T, b: T) {
 export function useShallowEqualValue<T>(value: T) {
   const ref = useRef(value);
   if (!shallowEqual(value, ref.current)) {
+    console.log('not equal');
     ref.current = value;
   }
   return ref.current;

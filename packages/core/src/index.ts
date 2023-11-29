@@ -46,13 +46,6 @@ export function useUrlState<T extends DefaultSchema>(
     () => new GenericRouter(update, {}),
   );
 
-  useEffect(() => {
-    router.init();
-    return () => {
-      router.destroy();
-    };
-  }, [router]);
-
   return useUrlStateWithRouter(schema, initialValue || null, {
     applyInitialValue: false,
     ...options,
@@ -66,7 +59,6 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
   options: UrlStateOptions & { router: UrlStateRouter },
 ): UrlState<T> & UrlStateMethods<T> {
   const schemaRef = useRef(schema);
-
   const cachedInitialValue = useShallowEqualValue(initialValue);
 
   const [state, setState] = useState<UrlState<T>>({
@@ -76,6 +68,7 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
     isReady: false,
   });
 
+  // needed it order to make handler functions stable
   const stateRef = useRef(state);
   stateRef.current = state;
 
@@ -86,7 +79,7 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
     const validationResult = schemaRef.current.safeParse(object);
 
     const result = validationResult.success
-      ? { success: true, data: validationResult.data, error: null }
+      ? { success: true, data: validationResult.data ?? null, error: null }
       : { success: false, data: object, error: validationResult.error };
 
     setState({
@@ -105,28 +98,34 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
     };
   }, [recalculateState]);
 
+  useEffect(() => {
+    if (state.isReady) {
+      options.router.init();
+    }
+    return () => {
+      options.router.destroy();
+    };
+  }, [options.router, state.isReady]);
+
   const push = usePush(options.router);
 
   const handlers = useHandlers<T>(push, stateRef);
 
   // set the state from initial url
   useEffect(() => {
-    if (!cachedInitialValue) {
-      update(window.location.search);
-    } else if (
-      state.isReady &&
-      options.applyInitialValue &&
-      cachedInitialValue &&
-      searchIsEmpty(window.location.search)
-    ) {
-      handlers.setState({ ...state.data, ...cachedInitialValue });
+    const searchString = window.location.search;
+
+    if (!searchIsEmpty(searchString)) {
+      update(searchString);
+    } else if (cachedInitialValue && options.applyInitialValue) {
+      handlers.setState(cachedInitialValue);
     } else {
       setState((st) => ({
         ...st,
         isReady: true,
       }));
     }
-  }, [state.isReady, cachedInitialValue, options.applyInitialValue]);
+  }, [cachedInitialValue, options.applyInitialValue]);
 
   return { ...state, ...handlers };
 }

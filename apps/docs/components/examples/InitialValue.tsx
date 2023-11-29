@@ -1,4 +1,3 @@
-import { Callout } from 'nextra/components';
 import { useUrlState } from 'react-use-url-state';
 import { z } from 'zod';
 
@@ -18,7 +17,7 @@ export function InitialValue({
       from: z.coerce.date().optional(),
     }),
     {
-      search: 'init',
+      search: applyInitialValue ? 'init-apply' : 'init-not-apply',
       limit: 1,
       from: new Date('1000-01-01'),
     },
