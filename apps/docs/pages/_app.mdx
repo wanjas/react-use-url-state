@@ -3,7 +3,7 @@ import Script from 'next/script';
 
 export default function App({ Component, pageProps }) {
   return <>
-    <Script src="https://www.googletagmanager.com/gtag/js?id=G-ZGW6DXKSML" strategy="worker" />
+    <Script src="https://www.googletagmanager.com/gtag/js?id=G-ZGW6DXKSML" />
     <Script id="google-analytics" strategy="afterInteractive">
       {`
           window.dataLayer = window.dataLayer || [];
@@ -12,7 +12,6 @@ export default function App({ Component, pageProps }) {
           gtag('config', 'G-ZGW6DXKSML');
         `}
     </Script>
-
     <Component {...pageProps} />
   </>;
 }
