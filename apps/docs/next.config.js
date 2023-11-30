@@ -10,6 +10,9 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  experimental: {
+    nextScriptWorkers: true,
+  },
 };
 
 const withNextra = require('nextra')({
