@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { UrlStateRouter } from './router';
 import { DefaultSchema, UrlState, UrlStateMethods } from './types';
 import { serializeObjectToUrlParams } from './utils';
@@ -54,5 +54,8 @@ export function useHandlers<T extends DefaultSchema>(
     [push, stateRef],
   );
 
-  return { setState, setValue, updateState };
+  return useMemo(
+    () => ({ setState, setValue, updateState }),
+    [setState, setValue, updateState],
+  );
 }

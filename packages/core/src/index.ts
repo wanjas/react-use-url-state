@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHandlers, usePush } from './handlers';
-import { GenericRouter, UrlStateRouter } from './router';
+import { GenericRouter, getGenericRouter, UrlStateRouter } from './router';
 import {
   DefaultSchema,
   UrlState,
@@ -14,37 +14,12 @@ import {
   useShallowEqualValue,
 } from './utils';
 
-type StateUpdateNotifier = (searchString: string) => void;
-
-const subscribers = new Map<StateUpdateNotifier, StateUpdateNotifier>();
-
-let currentStateString = '';
-
-function update(newSearchParams: string) {
-  console.log('Update');
-
-  if (newSearchParams !== currentStateString) {
-    currentStateString = newSearchParams;
-    subscribers.forEach((subscriber) => subscriber(currentStateString));
-  }
-}
-
-function subscribeToHistory(fn: StateUpdateNotifier) {
-  subscribers.set(fn, fn);
-}
-
-function unsubscribeFromHistory(fn: StateUpdateNotifier) {
-  subscribers.delete(fn);
-}
-
 export function useUrlState<T extends DefaultSchema>(
   schema: T,
   initialValue?: UrlStateValue<T> | null,
   options?: UrlStateOptions,
 ) {
-  const [router] = useState<UrlStateRouter>(
-    () => new GenericRouter(update, {}),
-  );
+  const [router] = useState<UrlStateRouter>(() => getGenericRouter());
 
   return useUrlStateWithRouter(schema, initialValue || null, {
     applyInitialValue: false,
@@ -91,21 +66,12 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
   }, []);
 
   useEffect(() => {
-    subscribeToHistory(recalculateState);
+    options.router.subscribe(recalculateState);
 
     return () => {
-      unsubscribeFromHistory(recalculateState);
+      options.router.unsubscribe(recalculateState);
     };
-  }, [recalculateState]);
-
-  useEffect(() => {
-    if (state.isReady) {
-      options.router.init();
-    }
-    return () => {
-      options.router.destroy();
-    };
-  }, [options.router, state.isReady]);
+  }, [options.router, recalculateState]);
 
   const push = usePush(options.router);
 
@@ -116,7 +82,7 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
     const searchString = window.location.search;
 
     if (!searchIsEmpty(searchString)) {
-      update(searchString);
+      recalculateState(searchString);
     } else if (cachedInitialValue && options.applyInitialValue) {
       handlers.setState(cachedInitialValue);
     } else {
@@ -125,7 +91,12 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
         isReady: true,
       }));
     }
-  }, [cachedInitialValue, options.applyInitialValue]);
+  }, [
+    cachedInitialValue,
+    handlers,
+    options.applyInitialValue,
+    recalculateState,
+  ]);
 
   return { ...state, ...handlers };
 }
