@@ -18,6 +18,14 @@
         "production": {}
       }
     },
+    "build-with-sitemap": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "cwd": "apps/docs",
+        "command": "next-sitemap"
+      }
+    },
     "serve": {
       "executor": "@nx/next:server",
       "defaultConfiguration": "development",

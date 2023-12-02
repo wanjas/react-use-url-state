@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://react-use-url-state.vercel.app
+
+# Sitemaps
+Sitemap: https://react-use-url-state.vercel.app/sitemap.xml
