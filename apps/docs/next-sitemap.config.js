@@ -5,4 +5,5 @@ module.exports = {
   generateRobotsTxt: true,
   sourceDir: path.resolve(__dirname, '../../dist/apps/docs/.next'),
   generateIndexSitemap: false,
+  changefreq: 'weekly',
 };

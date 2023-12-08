@@ -9,11 +9,15 @@ const config: DocsThemeConfig = {
   // chat: {
   //   link: 'https://discord.com',
   // },
+
   docsRepositoryBase:
     'https://github.com/wanjas/react-use-url-state/tree/main/apps/docs',
   footer: {
     text: 'React useUrlState',
   },
+  useNextSeoProps: () => ({
+    titleTemplate: '%s | useUrlState',
+  }),
 };
 
 export default config;

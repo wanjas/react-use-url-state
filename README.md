@@ -1,9 +1,17 @@
 # react-use-url-state
 
+![npm](https://img.shields.io/npm/v/react-use-url-state?logo=npm)
+![npm type definitions](https://img.shields.io/npm/types/react-use-url-state?logo=typescript)
+![npm](https://img.shields.io/npm/dw/react-use-url-state)
+![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/react-use-url-state)
+[![Known Vulnerabilities](https://snyk.io/test/npm/react-use-url-state/badge.svg)](https://snyk.io/test/react-use-url-state/axios)
+
 Use URL to store a state in React.
 
 * Easily handle numbers, dates, booleans, and arrays.
 * Have a type-safety with [Zod](https://zod.dev/)
+* CJS and ESM support
+* 0 dependencies
 
 > `https://example.com/?text=query&number=10&date=2023-11-29T13%3A52%3A50.230Z`
 > 
