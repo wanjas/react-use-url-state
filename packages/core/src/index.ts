@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHandlers, usePush } from './handlers';
-import { GenericRouter, getGenericRouter, UrlStateRouter } from './router';
+import { getGenericRouter, UrlStateRouter } from './router';
 import {
   DefaultSchema,
   UrlState,

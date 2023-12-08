@@ -1,10 +1,10 @@
 export type Callback = (newSearchParams: string) => void;
 
-export abstract class UrlStateRouter {
-  push(href: string): void {}
+export interface UrlStateRouter {
+  push(href: string): void;
 
-  subscribe(fn: Callback): void {}
-  unsubscribe(fn: Callback): void {}
+  subscribe(fn: Callback): void;
+  unsubscribe(fn: Callback): void;
 }
 
 export type GenericRouterOptions = {
@@ -14,20 +14,19 @@ export type GenericRouterOptions = {
 const subscribers = new Map<Callback, Callback>();
 
 let genericRouterCurrentStateString = '';
-export class GenericRouter extends UrlStateRouter {
+export class GenericRouter implements UrlStateRouter {
   private interval: number = 0;
 
   constructor(private options: GenericRouterOptions) {
-    super();
     this.options = { poolingIntervalMs: 100, ...options };
   }
 
-  override push(href: string): void {
+  push(href: string): void {
     window.history.pushState({}, '', href);
     this.onSearchParamsChange();
   }
 
-  override subscribe(fn: Callback): void {
+  subscribe(fn: Callback): void {
     subscribers.set(fn, fn);
 
     if (!this.interval) {
@@ -35,7 +34,7 @@ export class GenericRouter extends UrlStateRouter {
     }
   }
 
-  override unsubscribe(fn: Callback): void {
+  unsubscribe(fn: Callback): void {
     subscribers.delete(fn);
 
     if (subscribers.size === 0) {

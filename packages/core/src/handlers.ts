@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { MutableRefObject, useCallback, useMemo } from 'react';
 import { UrlStateRouter } from './router';
 import { DefaultSchema, UrlState, UrlStateMethods } from './types';
 import { serializeObjectToUrlParams } from './utils';
@@ -16,7 +16,7 @@ export function usePush(router: UrlStateRouter): Push {
 
 export function useHandlers<T extends DefaultSchema>(
   push: Push,
-  stateRef: React.MutableRefObject<UrlState<T>>,
+  stateRef: MutableRefObject<UrlState<T>>,
 ) {
   const setState = useCallback<UrlStateMethods<T>['setState']>(
     (state) => {

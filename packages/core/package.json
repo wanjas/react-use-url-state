@@ -13,7 +13,10 @@
     "hooks",
     "url",
     "state",
-    "url-state"
+    "url-state",
+    "search",
+    "params",
+    "query"
   ],
   "description": "React hook for managing state in the URL",
   "dependencies": {},
