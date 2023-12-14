@@ -21,6 +21,7 @@ export function Basic() {
     <div>
       <ButtonsGroup>
         <Button
+          id="set-basic-state"
           onClick={() =>
             setState({
               search: 'query',

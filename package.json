@@ -39,10 +39,12 @@
     "@typescript-eslint/eslint-plugin": "6.11.0",
     "@typescript-eslint/parser": "6.11.0",
     "babel-jest": "^29.4.1",
+    "cypress": "^13.0.0",
     "esbuild": "^0.19.2",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.1",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-cypress": "^2.13.4",
     "eslint-plugin-import": "2.29.0",
     "eslint-plugin-jsx-a11y": "6.8.0",
     "eslint-plugin-react": "7.33.2",
@@ -58,5 +60,10 @@
   },
   "nx": {
     "includedScripts": []
+  },
+  "pnpm": {
+    "neverBuiltDependencies": [
+      "cypress"
+    ]
   }
 }

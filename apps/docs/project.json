@@ -67,6 +67,19 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
+    },
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/docs/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "docs:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "docs:serve:production"
+        }
+      }
     }
   },
   "tags": []
