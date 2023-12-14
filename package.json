@@ -19,6 +19,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@nx/cypress": "17.2.3",
     "@nx/devkit": "17.2.3",
     "@nx/esbuild": "17.2.3",
     "@nx/eslint": "17.2.3",
@@ -59,4 +60,3 @@
     "includedScripts": []
   }
 }
-

@@ -43,6 +43,9 @@ dependencies:
     version: 3.22.4
 
 devDependencies:
+  '@nx/cypress':
+    specifier: 17.2.3
+    version: 17.2.3(@swc-node/register@1.6.8)(@swc/core@1.3.96)(@types/node@18.16.9)(eslint@8.48.0)(nx@17.2.3)(typescript@5.2.2)
   '@nx/devkit':
     specifier: 17.2.3
     version: 17.2.3(nx@17.2.3)
@@ -2279,6 +2282,26 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
+  /@nrwl/cypress@17.2.3(@swc-node/register@1.6.8)(@swc/core@1.3.96)(@types/node@18.16.9)(eslint@8.48.0)(nx@17.2.3)(typescript@5.2.2):
+    resolution: {integrity: sha512-05osID0O8xPZ4YuzJ1D+IuHkxwrY231ziGQwrz+zWb9F/kiYAqVN2yLTv92FLmT4X4842YzDVxVZCptlY0F8XA==}
+    dependencies:
+      '@nx/cypress': 17.2.3(@swc-node/register@1.6.8)(@swc/core@1.3.96)(@types/node@18.16.9)(eslint@8.48.0)(nx@17.2.3)(typescript@5.2.2)
+    transitivePeerDependencies:
+      - '@babel/traverse'
+      - '@swc-node/register'
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - cypress
+      - debug
+      - eslint
+      - js-yaml
+      - nx
+      - supports-color
+      - typescript
+      - verdaccio
+    dev: true
+
   /@nrwl/devkit@17.2.3(nx@17.2.3):
     resolution: {integrity: sha512-EG08AaA/kP/nam1Bt8dEJ2raftHedOvJIuEyh4mXXSdioA+H4ILU/m0/51cTwjjkv4wfoe/gxKCwqbei5VK1oQ==}
     dependencies:
@@ -2442,6 +2465,37 @@ packages:
       - '@swc-node/register'
       - '@swc/core'
       - debug
+    dev: true
+
+  /@nx/cypress@17.2.3(@swc-node/register@1.6.8)(@swc/core@1.3.96)(@types/node@18.16.9)(eslint@8.48.0)(nx@17.2.3)(typescript@5.2.2):
+    resolution: {integrity: sha512-wer3K6NQ7YfAWjuKEFPPHp71d++ZuOY9XXDdlFuo0RLGQxERzK4+2tiZ5UQrSSgn01aCc2aaCJXQr8TAvs34EA==}
+    peerDependencies:
+      cypress: '>= 3 < 14'
+    peerDependenciesMeta:
+      cypress:
+        optional: true
+    dependencies:
+      '@nrwl/cypress': 17.2.3(@swc-node/register@1.6.8)(@swc/core@1.3.96)(@types/node@18.16.9)(eslint@8.48.0)(nx@17.2.3)(typescript@5.2.2)
+      '@nx/devkit': 17.2.3(nx@17.2.3)
+      '@nx/eslint': 17.2.3(@swc-node/register@1.6.8)(@swc/core@1.3.96)(@types/node@18.16.9)(eslint@8.48.0)(nx@17.2.3)
+      '@nx/js': 17.2.3(@swc-node/register@1.6.8)(@swc/core@1.3.96)(@types/node@18.16.9)(nx@17.2.3)(typescript@5.2.2)
+      '@phenomnomnominal/tsquery': 5.0.1(typescript@5.2.2)
+      detect-port: 1.5.1
+      semver: 7.5.3
+      tslib: 2.6.2
+    transitivePeerDependencies:
+      - '@babel/traverse'
+      - '@swc-node/register'
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - debug
+      - eslint
+      - js-yaml
+      - nx
+      - supports-color
+      - typescript
+      - verdaccio
     dev: true
 
   /@nx/devkit@17.2.3(nx@17.2.3):
