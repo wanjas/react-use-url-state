@@ -14,7 +14,7 @@ import {
   useShallowEqualValue,
 } from './utils';
 
-export { DefaultSchema, UrlState } from './types';
+export type { DefaultSchema, UrlState } from './types';
 
 export function useUrlState<T extends DefaultSchema>(
   schema: T,
