@@ -3,6 +3,7 @@
 ![npm](https://img.shields.io/npm/v/react-use-url-state?logo=npm)
 ![npm type definitions](https://img.shields.io/npm/types/react-use-url-state?logo=typescript)
 ![npm](https://img.shields.io/npm/dw/react-use-url-state)
+![npm bundle size](https://img.shields.io/bundlephobia/min/react-use-url-state)
 [![Known Vulnerabilities](https://snyk.io/test/npm/react-use-url-state/badge.svg)](https://snyk.io/test/react-use-url-state/axios)
 
 Use URL to store a state in React.
