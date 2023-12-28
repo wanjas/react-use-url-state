@@ -29,7 +29,7 @@ export function useHandlers<T extends DefaultSchema>(
     [push, stateRef],
   );
 
-  const updateState = useCallback<UrlStateMethods<T>['updateState']>(
+  const setValues = useCallback<UrlStateMethods<T>['setValues']>(
     (state) => {
       if (typeof state === 'function') {
         state = state(stateRef.current.data);
@@ -55,7 +55,7 @@ export function useHandlers<T extends DefaultSchema>(
   );
 
   return useMemo(
-    () => ({ setState, setValue, updateState }),
-    [setState, setValue, updateState],
+    () => ({ setState, setValue, setValues }),
+    [setState, setValue, setValues],
   );
 }

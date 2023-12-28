@@ -23,7 +23,7 @@ export type UrlStateMethods<T extends DefaultSchema> = {
     key: K,
     value: UrlStateValue<T>[K],
   ) => void;
-  updateState: (
+  setValues: (
     state:
       | Partial<UrlStateValue<T>>
       | ((state: UrlStateValue<T> | null) => Partial<UrlStateValue<T>>),

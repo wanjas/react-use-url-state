@@ -3,7 +3,6 @@
 ![npm](https://img.shields.io/npm/v/react-use-url-state?logo=npm)
 ![npm type definitions](https://img.shields.io/npm/types/react-use-url-state?logo=typescript)
 ![npm](https://img.shields.io/npm/dw/react-use-url-state)
-![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/react-use-url-state)
 [![Known Vulnerabilities](https://snyk.io/test/npm/react-use-url-state/badge.svg)](https://snyk.io/test/react-use-url-state/axios)
 
 Use URL to store a state in React.
@@ -27,7 +26,7 @@ npm i react-use-url-state zod
 
 # Documentation
 
-📝[Documentation and examples](https://react-use-url-state.vercel.app/)
+📝[Documentation and examples](https://react-use-url-state.wrigglework.com/)
 
 
 ## Usage
@@ -36,7 +35,7 @@ npm i react-use-url-state zod
 
 ```tsx
 function MyComponent() {
-  const { data, setState, setValue, isError, error } = useUrlState(
+  const { data, setState, setValue, setValues, isError, error } = useUrlState(
     z.object({
       name: z.string(),
       age: z.coerce.number(),
@@ -65,8 +64,3 @@ function MyComponent() {
   </div>
 }
 ```
-
-## 🚧 TODO
-
-* [ ] Add automatic tests
-* [ ] Add routers without polling for Next App/Page

@@ -9,7 +9,7 @@ import { Button } from './Button';
 import { StateView } from './StateView';
 
 export function StateChanger() {
-  const { data, setState, setValue, updateState, isError, error } = useUrlState(
+  const { data, setState, setValue, setValues, isError, error } = useUrlState(
     z
       .object({
         name: z.string(),
