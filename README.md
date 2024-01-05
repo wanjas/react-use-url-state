@@ -4,11 +4,11 @@
 ![npm type definitions](https://img.shields.io/npm/types/react-use-url-state?logo=typescript)
 ![npm](https://img.shields.io/npm/dw/react-use-url-state)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/react-use-url-state)
-[![Known Vulnerabilities](https://snyk.io/test/npm/react-use-url-state/badge.svg)](https://snyk.io/test/react-use-url-state/axios)
+[![Known Vulnerabilities](https://snyk.io/test/npm/react-use-url-state/badge.svg)](https://snyk.io/test/npm/react-use-url-state)
 
-Use URL to store a state in React.
+Use URL params to store a state in React.
 
-* Easily handle numbers, dates, booleans, and arrays.
+* Handle numbers, dates, booleans, and arrays.
 * Have a type-safety with [Zod](https://zod.dev/)
 * CJS and ESM support
 * 0 dependencies
@@ -29,10 +29,9 @@ npm i react-use-url-state zod
 
 📝[Documentation and examples](https://react-use-url-state.wrigglework.com/)
 
-
 ## Usage
 
-> It's important to use `.coerce` on your Zod schema to ensure that the values are parsed correctly from the URL. 
+> 💬 It's important to use `.coerce` on your Zod schema to ensure that the values are parsed correctly from the URL. 
 
 ```tsx
 function MyComponent() {
