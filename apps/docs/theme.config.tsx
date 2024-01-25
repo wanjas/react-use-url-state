@@ -17,7 +17,16 @@ const config: DocsThemeConfig = {
   },
   useNextSeoProps: () => ({
     titleTemplate: '%s | useUrlState',
+    description: 'React state hook for URL params',
   }),
+  head: (
+    <>
+      {/*<meta property="og:title" content="React useUrlState" />*/}
+      {/*<meta*/}
+      {/*  property="og:description"*/}
+      {/*  content="React state hook for URL params"*/}
+      {/*/>*/}
+    </>
+  ),
 };
-
 export default config;
