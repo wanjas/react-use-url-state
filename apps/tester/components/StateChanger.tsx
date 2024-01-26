@@ -19,14 +19,13 @@ export function StateChanger() {
       .passthrough(),
   );
 
-  const [age, setAge] = useState(11);
-
   const router = useRouter();
 
   return (
     <div className="max-w-6xl mx-auto">
       <div className="flex gap-4">
         <Button
+          id="set-age-10"
           onClick={() => {
             setValue('age', 10);
           }}
@@ -34,23 +33,21 @@ export function StateChanger() {
           setValue('age', 10)
         </Button>
         <Button
+          id="set-birth-date"
           onClick={() => {
-            setValue('age', age);
-            setAge(age + 1);
-          }}
-        >
-          setValue('age', setAge)
-        </Button>
-        <Button
-          onClick={() => {
-            setValue('birthDate', new Date());
+            setValue('birthDate', new Date('2021-01-01T10:00:00.000Z'));
           }}
         >
           setValue('birthDate', new Date());
         </Button>
         <Button
+          id="set-everything"
           onClick={() => {
-            setState({ name: 'test', age: 10, birthDate: new Date() });
+            setState({
+              name: 'test',
+              age: 10,
+              birthDate: new Date('2021-01-01T10:00:00.000Z'),
+            });
           }}
         >
           {`setState({ name: 'test', age: 10, birthDate: new Date() })`}
@@ -64,6 +61,7 @@ export function StateChanger() {
 
       <div>
         <Button
+          id="router-push"
           onClick={() => {
             router.push(
               `?${new URLSearchParams({
@@ -77,6 +75,7 @@ export function StateChanger() {
       </div>
       <div>
         <Link
+          id="next-link"
           href={`?${new URLSearchParams({
             name: 'link/test',
             age: '77',

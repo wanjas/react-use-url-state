@@ -1,7 +1,7 @@
 {
-  "name": "playground",
+  "name": "tester",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/playground",
+  "sourceRoot": "apps/tester",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,11 +9,11 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/playground"
+        "outputPath": "dist/apps/tester"
       },
       "configurations": {
         "development": {
-          "outputPath": "apps/playground"
+          "outputPath": "apps/tester"
         },
         "production": {}
       }
@@ -22,16 +22,16 @@
       "executor": "@nx/next:server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "playground:build",
+        "buildTarget": "tester:build",
         "dev": true
       },
       "configurations": {
         "development": {
-          "buildTarget": "playground:build:development",
+          "buildTarget": "tester:build:development",
           "dev": true
         },
         "production": {
-          "buildTarget": "playground:build:production",
+          "buildTarget": "tester:build:production",
           "dev": false
         }
       }
@@ -39,19 +39,32 @@
     "export": {
       "executor": "@nx/next:export",
       "options": {
-        "buildTarget": "playground:build:production"
+        "buildTarget": "tester:build:production"
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/playground/jest.config.ts"
+        "jestConfig": "apps/tester/jest.config.ts"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
+    },
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/tester/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "tester:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "tester:serve:production"
+        }
+      }
     }
   },
   "tags": []

@@ -1,5 +1,6 @@
 {
   "extends": [
+    "plugin:cypress/recommended",
     "plugin:@nx/react-typescript",
     "next",
     "next/core-web-vitals",
@@ -16,7 +17,7 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "@next/next/no-html-link-for-pages": ["error", "apps/playground/pages"]
+        "@next/next/no-html-link-for-pages": ["error", "apps/tester/pages"]
       }
     },
     {
@@ -32,6 +33,10 @@
       "env": {
         "jest": true
       }
+    },
+    {
+      "files": ["*.cy.{ts,js,tsx,jsx}", "cypress/**/*.{ts,js,tsx,jsx}"],
+      "rules": {}
     }
   ]
 }
