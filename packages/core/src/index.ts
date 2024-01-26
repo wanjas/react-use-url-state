@@ -16,6 +16,13 @@ import {
 
 export type { DefaultSchema, UrlState } from './types';
 
+/**
+ * Creates a hook that will manage the state of the URL search params.
+ * @param {z.ZodObject} schema - zod schema to verify the url state
+ * @param {Object} [initialValue] - initial value of the state
+ * @param {UrlStateOptions} [options]
+ * @param {boolean} [options.applyInitialValue] - if true, the initial value will be applied to the URL
+ */
 export function useUrlState<T extends DefaultSchema>(
   schema: T,
   initialValue?: UrlStateValue<T> | null,
@@ -45,7 +52,7 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
     isReady: false,
   });
 
-  // needed it order to make handler functions stable
+  // need this in order to make handler functions stable
   const stateRef = useRef(state);
   stateRef.current = state;
 

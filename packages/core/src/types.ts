@@ -1,6 +1,9 @@
 import { z } from 'zod';
 
 export type UrlStateOptions = {
+  /**
+   * If true, the initial value will be applied to the URL.
+   */
   applyInitialValue: boolean;
 };
 
