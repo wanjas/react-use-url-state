@@ -5,7 +5,7 @@
   "scripts": {},
   "private": true,
   "dependencies": {
-    "@builder.io/partytown": "0.9.0",
+    "@builder.io/partytown": "0.9.1",
     "autoprefixer": "10.4.17",
     "clsx": "2.1.0",
     "next-sitemap": "4.2.3",
