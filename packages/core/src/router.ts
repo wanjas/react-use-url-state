@@ -1,5 +1,15 @@
 export type Callback = (newSearchParams: string) => void;
 
+declare global {
+  interface Window {
+    next?: {
+      router?: {
+        push: (href: string) => void;
+      };
+    };
+  }
+}
+
 export interface UrlStateRouter {
   push(href: string): void;
 
@@ -11,23 +21,28 @@ export type GenericRouterOptions = {
   poolingIntervalMs?: number;
 };
 
-const subscribers = new Map<Callback, Callback>();
-
 let genericRouterCurrentStateString = '';
 export class GenericRouter implements UrlStateRouter {
   private interval: number = 0;
+  private subscribers = new Map<Callback, Callback>();
 
   constructor(private options: GenericRouterOptions) {
     this.options = { poolingIntervalMs: 100, ...options };
   }
 
   push(href: string): void {
-    window.history.pushState({}, '', href);
+    // Use Next.js router if available
+    // Next.js exposes a global object `window.next.router` with a `push` method for both /pages and /app routes
+    if (typeof window.next?.router?.push === 'function') {
+      window.next.router.push(href);
+    } else {
+      window.history.pushState({}, '', href);
+    }
     this.onSearchParamsChange();
   }
 
   subscribe(fn: Callback): void {
-    subscribers.set(fn, fn);
+    this.subscribers.set(fn, fn);
 
     if (!this.interval) {
       this.startPolling();
@@ -35,9 +50,9 @@ export class GenericRouter implements UrlStateRouter {
   }
 
   unsubscribe(fn: Callback): void {
-    subscribers.delete(fn);
+    this.subscribers.delete(fn);
 
-    if (subscribers.size === 0) {
+    if (this.subscribers.size === 0) {
       this.stopPolling();
     }
   }
@@ -45,7 +60,7 @@ export class GenericRouter implements UrlStateRouter {
   onSearchParamsChange(): void {
     if (window.location.search !== genericRouterCurrentStateString) {
       genericRouterCurrentStateString = window.location.search;
-      subscribers.forEach((subscriber) =>
+      this.subscribers.forEach((subscriber) =>
         subscriber(genericRouterCurrentStateString),
       );
     }
@@ -53,10 +68,11 @@ export class GenericRouter implements UrlStateRouter {
 
   private startPolling(): void {
     // 'popstate' event in browser is not reliable, so we need to poll
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event#when_popstate_is_sent
     if (typeof window !== 'undefined') {
       this.interval = setInterval(() => {
         this.onSearchParamsChange();
-      }, this.options.poolingIntervalMs) as unknown as number; // fix for NodeJS
+      }, this.options.poolingIntervalMs) as unknown as number; // type fix for NodeJS
     }
   }
 
