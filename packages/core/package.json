@@ -16,7 +16,8 @@
     "url-state",
     "search",
     "params",
-    "query"
+    "query",
+    "front-end"
   ],
   "description": "React hook for managing state in the URL",
   "dependencies": {},

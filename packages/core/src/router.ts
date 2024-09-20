@@ -33,11 +33,13 @@ export class GenericRouter implements UrlStateRouter {
   push(href: string): void {
     // Use Next.js router if available
     // Next.js exposes a global object `window.next.router` with a `push` method for both /pages and /app routes
-    if (typeof window.next?.router?.push === 'function') {
-      window.next.router.push(href);
-    } else {
-      window.history.pushState({}, '', href);
-    }
+    // if (typeof window.next?.router?.push === 'function') {
+    //   console.log('Next.js router is available');
+    //   window.next.router.push(href);
+    // } else {
+    // console.log('Next.js router is NOT available');
+    window.history.pushState({}, '', href);
+    // }
     this.onSearchParamsChange();
   }
 
