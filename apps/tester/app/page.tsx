@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styles from './page.module.css';
 
 export default async function Index() {
@@ -15,6 +16,8 @@ export default async function Index() {
               <span> Hello there, </span>
               Welcome tester 👋
             </h1>
+
+            <Link href="/state">To state</Link>
           </div>
         </div>
       </div>

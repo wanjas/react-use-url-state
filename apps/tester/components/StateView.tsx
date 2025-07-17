@@ -1,7 +1,7 @@
 'use client';
 
 export type StateViewProps = {
-  state: Record<string, unknown>;
+  state: Record<string, unknown> | null;
 };
 
 export function StateView({ state }: StateViewProps) {

@@ -4,21 +4,16 @@ import { InitialValue } from '../../components/examples/InitialValue';
 # Initial value
 
 <Callout>
-  Initial value is applied on <b>initial load</b>.
+  Use zod's `.default()` method to set the initial value for the property.
 </Callout>
 
-```tsx {8-10} copy
+```tsx {3-5} copy
 const { data, setState, setValue } = useUrlState(
   z.object({
-    search: z.string(),
-    limit: z.coerce.number().max(100),
-    from: z.coerce.date().optional(),
+    search: z.string().default('initial-value'),
+    limit: z.coerce.number().max(100).default(1),
+    from: z.coerce.date().default(new Date('1000-01-01')),
   }),
-  {
-    search: 'init',
-    limit: 1,
-    from: new Date('1000-01-01'),
-  },
 );
 
 return (

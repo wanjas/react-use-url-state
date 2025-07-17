@@ -31,6 +31,6 @@
   },
   "peerDependencies": {
     "react": ">=18",
-    "zod": "3.x"
+    "zod": "3.x || 4.x"
   }
 }

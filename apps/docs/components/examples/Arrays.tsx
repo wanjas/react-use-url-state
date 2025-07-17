@@ -31,7 +31,7 @@ export function Arrays() {
         <Button
           onClick={() =>
             setState({
-              search: 'query',
+              search: 'arrays',
               limit: 10,
               from: new Date(),
               stringArr: ['one', 'two'],

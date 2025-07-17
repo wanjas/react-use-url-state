@@ -12,18 +12,12 @@ export function InitialValue({
 }) {
   const urlState = useUrlState(
     z.object({
-      search: z.string(),
-      limit: z.coerce.number().max(100),
-      from: z.coerce.date().optional(),
+      search: z
+        .string()
+        .default(applyInitialValue ? 'init-apply' : 'init-not-apply'),
+      limit: z.coerce.number().max(100).default(1),
+      from: z.coerce.date().default(new Date('1000-01-01')),
     }),
-    {
-      search: applyInitialValue ? 'init-apply' : 'init-not-apply',
-      limit: 1,
-      from: new Date('1000-01-01'),
-    },
-    {
-      applyInitialValue,
-    },
   );
 
   const { setState, setValue, data, isReady } = urlState;
@@ -34,7 +28,7 @@ export function InitialValue({
         <Button
           onClick={() =>
             setState({
-              search: 'query',
+              search: 'initial-value',
               limit: 10,
               from: new Date(),
             })

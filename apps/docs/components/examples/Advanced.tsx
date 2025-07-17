@@ -1,4 +1,3 @@
-import { Callout } from 'nextra/components';
 import { useUrlState } from 'react-use-url-state';
 import { z } from 'zod';
 
@@ -23,8 +22,8 @@ export function Advanced() {
         <Button
           onClick={() =>
             setState({
-              search: 'query',
-              limit: 10,
+              search: 'advanced',
+              limit: 99,
               from: new Date(),
             })
           }

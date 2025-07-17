@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { DefaultSchema } from './types';
 
 function isNil(value: unknown): value is null | undefined {
   return value === null || value === undefined;
@@ -73,6 +74,22 @@ export function useShallowEqualValue<T>(value: T) {
     console.log('not equal');
     ref.current = value;
   }
+  return ref.current;
+}
+
+export function useStableSchema<T extends DefaultSchema>(schema: T): T {
+  const ref = useRef<T>(schema);
+  if (ref.current === schema) {
+    return ref.current;
+  }
+
+  // ZodObject is not a plain object, so we need to check the shape
+  // https://github.com/colinhacks/zod/issues/1372
+  // https://gist.github.com/shcallaway/84574d11017c3de762945b7808ccc45d
+  if (!shallowEqual(ref.current.shape, schema.shape)) {
+    ref.current = schema;
+  }
+
   return ref.current;
 }
 
