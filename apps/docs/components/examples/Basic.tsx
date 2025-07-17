@@ -24,7 +24,7 @@ export function Basic() {
           id="set-basic-state"
           onClick={() =>
             setState({
-              search: 'query',
+              search: 'basic',
               limit: 10,
               from: new Date(),
             })

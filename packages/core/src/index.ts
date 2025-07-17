@@ -1,52 +1,26 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useHandlers, usePush } from './handlers';
-import { getGenericRouter, UrlStateRouter } from './router';
-import {
-  DefaultSchema,
-  UrlState,
-  UrlStateMethods,
-  UrlStateOptions,
-  UrlStateValue,
-} from './types';
-import {
-  searchIsEmpty,
-  urlParamsToObject,
-  useShallowEqualValue,
-} from './utils';
+import { Callback, UrlStateController } from './controller';
+import { useHandlers } from './handlers';
+import { DefaultSchema, UrlState, UrlStateOptions } from './types';
+import { searchIsEmpty, useStableSchema } from './utils';
 
 export type { DefaultSchema, UrlState } from './types';
 
 /**
  * Creates a hook that will manage the state of the URL search params.
  * @param {z.ZodObject} schema - zod schema to verify the url state
- * @param {Object} [initialValue] - initial value of the state
  * @param {UrlStateOptions} [options]
  * @param {boolean} [options.applyInitialValue] - if true, the initial value will be applied to the URL
  */
 export function useUrlState<T extends DefaultSchema>(
   schema: T,
-  initialValue?: UrlStateValue<T> | null,
   options?: UrlStateOptions,
 ) {
-  const [router] = useState<UrlStateRouter>(() => getGenericRouter());
-
-  return useUrlStateWithRouter(schema, initialValue || null, {
-    applyInitialValue: false,
-    ...options,
-    router: router,
-  });
-}
-
-export function useUrlStateWithRouter<T extends DefaultSchema>(
-  schema: T,
-  initialValue: UrlStateValue<T> | null,
-  options: UrlStateOptions & { router: UrlStateRouter },
-): UrlState<T> & UrlStateMethods<T> {
-  const schemaRef = useRef(schema);
-  const cachedInitialValue = useShallowEqualValue(initialValue);
+  schema = useStableSchema(schema);
+  const controller = UrlStateController.getUrlStateController();
 
   const [state, setState] = useState<UrlState<T>>({
-    data: cachedInitialValue,
+    data: null,
     error: null,
     isError: false,
     isReady: false,
@@ -56,56 +30,41 @@ export function useUrlStateWithRouter<T extends DefaultSchema>(
   const stateRef = useRef(state);
   stateRef.current = state;
 
-  const recalculateState = useCallback((searchString: string) => {
-    const params = new URLSearchParams(searchString);
-    const object = urlParamsToObject(params);
+  const recalculateState = useCallback<Callback>(
+    (params) => {
+      const validationResult = schema.safeParse(params);
 
-    const validationResult = schemaRef.current.safeParse(object);
+      const result = validationResult.success
+        ? { success: true, data: validationResult.data, error: null }
+        : { success: false, data: null, error: validationResult.error };
 
-    const result = validationResult.success
-      ? { success: true, data: validationResult.data ?? null, error: null }
-      : { success: false, data: object, error: validationResult.error };
-
-    setState({
-      data: result.data,
-      isError: !result.success,
-      error: result.error,
-      isReady: true,
-    });
-  }, []);
+      setState({
+        data: result.data,
+        isError: !result.success,
+        error: result.error,
+        isReady: true,
+      });
+    },
+    [schema],
+  );
 
   useEffect(() => {
-    options.router.subscribe(recalculateState);
+    controller.subscribe(recalculateState);
 
     return () => {
-      options.router.unsubscribe(recalculateState);
+      controller.unsubscribe(recalculateState);
     };
-  }, [options.router, recalculateState]);
+  }, [controller, recalculateState]);
 
-  const push = usePush(options.router);
+  const handlers = useHandlers<T>(controller, stateRef);
 
-  const handlers = useHandlers<T>(push, stateRef);
-
-  // set the state from initial url
+  // apply initial value to the URL if the state is ready and applyInitialValue is true
+  // initial value is taken from the default values of the schema
   useEffect(() => {
-    const searchString = window.location.search;
-
-    if (!searchIsEmpty(searchString)) {
-      recalculateState(searchString);
-    } else if (cachedInitialValue && options.applyInitialValue) {
-      handlers.setState(cachedInitialValue);
-    } else {
-      setState((st) => ({
-        ...st,
-        isReady: true,
-      }));
+    if (state.isReady && options?.applyInitialValue) {
+      handlers.setValues(state.data || {});
     }
-  }, [
-    cachedInitialValue,
-    handlers,
-    options.applyInitialValue,
-    recalculateState,
-  ]);
+  }, [handlers, options?.applyInitialValue, state.isReady]);
 
   return { ...state, ...handlers };
 }

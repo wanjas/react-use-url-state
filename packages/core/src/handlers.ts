@@ -1,21 +1,10 @@
 import { MutableRefObject, useCallback, useMemo } from 'react';
-import { UrlStateRouter } from './router';
+import { UrlStateController } from './controller';
 import { DefaultSchema, UrlState, UrlStateMethods } from './types';
 import { serializeObjectToUrlParams } from './utils';
 
-export type Push = (href: string) => void;
-
-export function usePush(router: UrlStateRouter): Push {
-  return useCallback(
-    (href: string) => {
-      router.push(href);
-    },
-    [router],
-  );
-}
-
 export function useHandlers<T extends DefaultSchema>(
-  push: Push,
+  controller: UrlStateController,
   stateRef: MutableRefObject<UrlState<T>>,
 ) {
   const setState = useCallback<UrlStateMethods<T>['setState']>(
@@ -24,9 +13,9 @@ export function useHandlers<T extends DefaultSchema>(
         state = state(stateRef.current.data);
       }
       const href = serializeObjectToUrlParams(state);
-      push(href);
+      controller.push(href);
     },
-    [push, stateRef],
+    [controller, stateRef],
   );
 
   const setValues = useCallback<UrlStateMethods<T>['setValues']>(
@@ -38,9 +27,9 @@ export function useHandlers<T extends DefaultSchema>(
         ...stateRef.current.data,
         ...state,
       });
-      push(href);
+      controller.push(href);
     },
-    [push, stateRef],
+    [controller, stateRef],
   );
 
   const setValue = useCallback<UrlStateMethods<T>['setValue']>(
@@ -49,9 +38,9 @@ export function useHandlers<T extends DefaultSchema>(
         ...stateRef.current.data,
         [key]: value,
       });
-      push(href);
+      controller.push(href);
     },
-    [push, stateRef],
+    [controller, stateRef],
   );
 
   return useMemo(

@@ -30,7 +30,7 @@ export function StateChanger() {
             setValue('age', 10);
           }}
         >
-          setValue('age', 10)
+          {"setValue('age', 10)"}
         </Button>
         <Button
           id="set-birth-date"
@@ -38,7 +38,7 @@ export function StateChanger() {
             setValue('birthDate', new Date('2021-01-01T10:00:00.000Z'));
           }}
         >
-          setValue('birthDate', new Date());
+          {"setValue('birthDate', new Date());"}
         </Button>
         <Button
           id="set-everything"
