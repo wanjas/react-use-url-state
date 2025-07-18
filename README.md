@@ -6,12 +6,10 @@
 ![npm bundle size](https://img.shields.io/bundlephobia/min/react-use-url-state)
 [![Known Vulnerabilities](https://snyk.io/test/npm/react-use-url-state/badge.svg)](https://snyk.io/test/npm/react-use-url-state)
 
-Use URL params to store a state in React.
+Easy access to URL params in React.
 
-* Handle numbers, dates, booleans, and arrays.
-* Have a type-safety with [Zod](https://zod.dev/)
-* CJS and ESM support
-* 0 dependencies
+* Numbers, dates, booleans, and arrays in URL params.
+* Type-safety with [Zod 3.x and 4.x](https://zod.dev/)
 
 > `https://example.com/?text=query&number=10&date=2023-11-29T13%3A52%3A50.230Z`
 > 
