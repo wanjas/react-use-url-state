@@ -22,6 +22,7 @@
   "description": "React hook for managing state in the URL",
   "dependencies": {},
   "type": "commonjs",
+  "types": "./src/index.d.ts",
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
