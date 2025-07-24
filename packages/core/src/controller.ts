@@ -48,8 +48,6 @@ export class UrlStateController implements UrlStateControllerInterface {
     const search = urlParamsToObject(newSearchParams);
     setTimeout(() => fn(search), 0);
 
-    console.log('poll');
-    console.log('Interval', this.interval);
     if (!this.interval) {
       this.startPolling();
     }
@@ -58,15 +56,12 @@ export class UrlStateController implements UrlStateControllerInterface {
   unsubscribe(fn: Callback): void {
     this.subscribers.delete(fn);
 
-    console.log('Stop polling');
-
     if (this.subscribers.size === 0) {
       this.stopPolling();
     }
   }
 
   onSearchParamsChange(): void {
-    console.log(this.previousHref, window.location.href);
     if (window.location.href !== this.previousHref) {
       this.previousHref = window.location.href;
 
